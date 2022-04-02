@@ -11,6 +11,15 @@ When('A user enter the username {string}', (username) => {
     homeSaucePage.typeUsername(username);
 });
 
+When('A user provides incorrect crednetials', (table) => {
+    table.hashes().forEach(row => {
+        cy.log(row.username);
+        cy.log(row.password);
+        homeSaucePage.typeUsername(row.username);
+        homeSaucePage.typePassword(row.password);
+    });
+});
+
 And('A user enter the password {string}', (password) => {
     homeSaucePage.typePassword(password);
 });
@@ -23,6 +32,6 @@ Then('A user will be logged in', () => {
     cy.url().should('contains', '/inventory.html');
 });
 
-Then('A user will be receiving a failed message', () => {
-    homeSaucePage.elements.errorMessage().should('have.text', 'Epic sadface: Sorry, this user has been locked out.')
+Then('A user will {string} message', (errorMessage) => {
+    homeSaucePage.elements.errorMessage().should('have.text', errorMessage)
 })
